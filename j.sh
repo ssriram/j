@@ -5,11 +5,26 @@
 JFILE=~/.jfile
 
 declare -A J
-source $JFILE
+
+if [ -x $JFILE ]; then
+    source $JFILE
+fi
 
 function j(){
 
   case "$1" in
+
+    # help
+    -h|--help)
+        echo "j -h|--help               show help"
+        echo "j -a <name>               add new entry for pwd with key <name>"
+        echo "j -d <name>               delete entry for key <name>"
+        echo "j -l                      list all entries"
+        echo "j -r                      reload all entries"
+        echo "j -s                      save all entries to $JFILE"
+        echo "j <name>                  jump to directory with key <name>"
+        ;;
+
     # add directory entry
     -a)
         J[$2]=`pwd`
@@ -27,17 +42,19 @@ function j(){
         done
         ;;
 
+    # reload entries
+    -r)
+        if [ -x $JFILE ]; then
+            source $JFILE
+        fi
+        ;;
+
     # persist changes
     -s)
         echo "" > $JFILE
         for jk in "${!J[@]}"; do
           echo "J[\"${jk}\"]=\"${J[$jk]}\"" >> $JFILE
         done
-        ;;
-
-    # reload entries
-    -r)
-        source $JFILE
         ;;
 
     # by default jump
