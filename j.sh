@@ -6,7 +6,7 @@ JFILE=~/.jfile
 
 declare -A J
 
-if [ -x $JFILE ]; then
+if [ -f $JFILE ]; then
     source $JFILE
 fi
 
@@ -44,7 +44,7 @@ function j(){
 
     # reload entries
     -r)
-        if [ -x $JFILE ]; then
+        if [ -f $JFILE ]; then
             source $JFILE
         fi
         ;;
